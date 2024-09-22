@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using users.RestApi.Data;
 using Microsoft.OpenApi.Models;
+using users.RestApi.Repositories.Customer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,7 +22,12 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Users API", Version = "v1" });
 });
 
+
 // ... diğer servisler ve middleware'ler ...
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+
+
+
 
 var app = builder.Build();
 
@@ -45,5 +51,8 @@ using (var scope = app.Services.CreateScope())
     var context = services.GetRequiredService<AppDbContext>();
     context.Database.EnsureCreated();
 }
+
+
+
 
 app.Run();

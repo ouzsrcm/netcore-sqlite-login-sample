@@ -1,4 +1,4 @@
-namespace customers.RestApi.Models;
+namespace users.RestApi.Models;
 
 public class Customer
 {

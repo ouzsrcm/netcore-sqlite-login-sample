@@ -1,79 +1,69 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using customers.RestApi.Data;
-using customers.RestApi.Models;
 using users.RestApi.Data;
+using users.RestApi.Models;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using System.Text.Json;
+using users.RestApi.Repositories.Customer;
 
-namespace customers.RestApi.Controllers
+namespace users.RestApi.Controllers
 {
     [ApiController]
     [Route("api/customers")]
     public class CustomersController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly ICustomerRepository _customerRepository;
 
-        public CustomersController(AppDbContext context)
+        public CustomersController(ICustomerRepository customerRepository)
         {
-            _context = context;
+            _customerRepository = customerRepository;
         }
+
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
+        public async Task<ActionResult> GetCustomers()
         {
-            return await _context.Customers.ToListAsync();
+            return Ok(await _customerRepository.GetAllAsync());
         }
 
 
-        [HttpPost("create")]
-        public async Task<IActionResult> PostCustomer([FromBody] JsonElement customerData)
+       [HttpPost("create")]
+        public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
         {
-            // Gelen veriyi logla
-            var jsonString = System.Text.Json.JsonSerializer.Serialize(customerData);
-            Console.WriteLine($"Received data: {jsonString}");
-
-            try
-            {
-                if (customerData.ValueKind == JsonValueKind.Object)
-                {
-                    // Tek müşteri nesnesi
-                    var customer = JsonSerializer.Deserialize<Customer>(jsonString);
-                    _context.Customers.Add(customer);
-                    await _context.SaveChangesAsync();
-                    return CreatedAtAction(nameof(GetCustomer), new { id = customer.Id }, customer);
-                }
-                else if (customerData.ValueKind == JsonValueKind.Array)
-                {
-                    // Müşteri nesneleri dizisi
-                    var customers = JsonSerializer.Deserialize<List<Customer>>(jsonString);
-                    _context.Customers.AddRange(customers);
-                    await _context.SaveChangesAsync();
-                    return Ok(customers);
-                }
-                else
-                {
-                    return BadRequest("Invalid data format. Expected a single Customer object or an array of Customer objects.");
-                }
-            }
-            catch (JsonException ex)
-            {
-                return BadRequest($"JSON deserialization error: {ex.Message}");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest($"An error occurred: {ex.Message}");
-            }
+            var createdCustomer = await _customerRepository.AddAsync(customer);
+            return CreatedAtAction(nameof(GetCustomer), new { id = createdCustomer.Id }, createdCustomer);
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutCustomer(int id, Customer customer)
+        {
+            if (id != customer.Id)
+            {
+                return BadRequest();
+            }
+
+            await _customerRepository.UpdateAsync(customer);
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCustomer(int id)
+        {
+            await _customerRepository.DeleteAsync(id);
+            return NoContent();
+        }
+
         [HttpGet("{id}", Name = "GetCustomer")]
         public async Task<ActionResult<Customer>> GetCustomer(int id)
         {
-            var user = await _context.Customers.FindAsync(id);
-            if (user == null)
+
+            var customer = await _customerRepository.GetByIdAsync(id);
+
+            if (customer == null)
             {
                 return NotFound();
             }
-            return user;
+            return customer;
         }
 
         [HttpGet("test")]

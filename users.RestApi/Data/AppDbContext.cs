@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using users.RestApi.Models;
-using customers.RestApi.Models;
 
 namespace users.RestApi.Data
 {
