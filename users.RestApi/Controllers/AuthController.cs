@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using users.DataAccess.DataStore.UnitOfWorks.Abstract;
-using users.Models.ApiModels;
+using users.RestApi.Models;
 using users.Models.DataTransferObjects.Users;
+using users.Models.ApiModels;
 
 namespace users.RestApi.Controllers;
 
@@ -31,8 +32,7 @@ public class AuthController : Controller
     [Route("auth-user")]
     public async Task<AuthUserResponse> UserLogin(AuthUserRequest request)
     {
-
-        var res = await uow.AuthUserAsync(new Models.DataTransferObjects.Users.CreateUserModel()
+        var res = await uow.AuthUserAsync(new CreateUserModel()
         {
             ClientIp = ip,
             Password = request.Password,
@@ -53,7 +53,7 @@ public class AuthController : Controller
     [Route("create-user")]
     public async Task CreateUser(CreateUserRequest request)
     {
-        await uow.CreateUserAsync(new Models.DataTransferObjects.Users.CreateUserModel()
+        await uow.CreateUserAsync(new CreateUserModel()
         {
             ClientIp = ip,
             Password = request.Password,
