@@ -9,7 +9,7 @@ using users.RestApi.Data;
 
 namespace users.RestApi.Migrations
 {
-    [DbContext(typeof(UserContext))]
+    [DbContext(typeof(AppDbContext))]
     [Migration("20240922173212_AddCustomerTable")]
     partial class AddCustomerTable
     {
