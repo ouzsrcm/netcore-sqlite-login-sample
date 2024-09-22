@@ -9,9 +9,9 @@ namespace users.RestApi.Controllers
     [Route("api/users")]
     public class UsersController : ControllerBase
     {
-        private readonly UserContext _context;
+        private readonly AppDbContext _context;
 
-        public UsersController(UserContext context)
+        public UsersController(AppDbContext context)
         {
             _context = context;
         }

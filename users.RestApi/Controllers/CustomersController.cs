@@ -1,16 +1,20 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using customers.RestApi.Data;
+using customers.RestApi.Models;
 using users.RestApi.Data;
+using Microsoft.DotNet.Scaffolding.Shared.Messaging;
+using System.Text.Json;
 
-namespace Customers.RestApi.Controllers
+namespace customers.RestApi.Controllers
 {
     [ApiController]
-    [Route("api/Customers")]
+    [Route("api/customers")]
     public class CustomersController : ControllerBase
     {
-        private readonly CustomerContext _context;
+        private readonly AppDbContext _context;
 
-        public CustomersController(CustomerContext context)
+        public CustomersController(AppDbContext context)
         {
             _context = context;
         }
@@ -21,14 +25,46 @@ namespace Customers.RestApi.Controllers
             return await _context.Customers.ToListAsync();
         }
 
-        [HttpPost("create")]
-        public async Task<ActionResult<Customer>> PostUser(Customer customer)
-        {
-            _context.Customers.Add(customer);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetCustomer), new { id = customer.Id }, customer);
-        }
 
+        [HttpPost("create")]
+        public async Task<IActionResult> PostCustomer([FromBody] JsonElement customerData)
+        {
+            // Gelen veriyi logla
+            var jsonString = System.Text.Json.JsonSerializer.Serialize(customerData);
+            Console.WriteLine($"Received data: {jsonString}");
+
+            try
+            {
+                if (customerData.ValueKind == JsonValueKind.Object)
+                {
+                    // Tek müşteri nesnesi
+                    var customer = JsonSerializer.Deserialize<Customer>(jsonString);
+                    _context.Customers.Add(customer);
+                    await _context.SaveChangesAsync();
+                    return CreatedAtAction(nameof(GetCustomer), new { id = customer.Id }, customer);
+                }
+                else if (customerData.ValueKind == JsonValueKind.Array)
+                {
+                    // Müşteri nesneleri dizisi
+                    var customers = JsonSerializer.Deserialize<List<Customer>>(jsonString);
+                    _context.Customers.AddRange(customers);
+                    await _context.SaveChangesAsync();
+                    return Ok(customers);
+                }
+                else
+                {
+                    return BadRequest("Invalid data format. Expected a single Customer object or an array of Customer objects.");
+                }
+            }
+            catch (JsonException ex)
+            {
+                return BadRequest($"JSON deserialization error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"An error occurred: {ex.Message}");
+            }
+        }
         [HttpGet("{id}", Name = "GetCustomer")]
         public async Task<ActionResult<Customer>> GetCustomer(int id)
         {

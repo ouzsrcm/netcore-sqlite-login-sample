@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using users.RestApi.Models;
+using customers.RestApi.Models;
 
-namespace users.RestApi.Data
+namespace customers.RestApi.Data
 {
     public class CustomerContext : DbContext
     {

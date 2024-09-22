@@ -23,6 +23,8 @@
   <ItemGroup>
     <ProjectReference Include="..\users.DataAccess\users.DataAccess.csproj" />
     <ProjectReference Include="..\users.Models\users.Models.csproj" />
+    <ProjectReference Include="..\customers.DataAccess\customers.DataAccess.csproj" />
+    <ProjectReference Include="..\customers.Models\customers.Models.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using users.DataAccess.DataContexts;
-using users.DataAccess.DataStore.UnitOfWorks.Abstract;
-using users.DataAccess.DataStore.UnitOfWorks.Concrete;
 using users.RestApi.Data;
 using Microsoft.OpenApi.Models;
 
@@ -14,9 +11,9 @@ builder.WebHost.UseUrls("http://localhost:5256");
 builder.Services.AddControllers();
 
 // Configure SQLite
-builder.Services.AddDbContext<users.RestApi.Data.UserContext>(options =>
+builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+ 
 // Add Swagger services
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -43,7 +40,9 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<users.RestApi.Data.UserContext>();
+
+    // AppDbContext oluştur
+    var context = services.GetRequiredService<AppDbContext>();
     context.Database.EnsureCreated();
 }
 
