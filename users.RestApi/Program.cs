@@ -27,6 +27,8 @@ builder.Services.AddSwaggerGen(c =>
 // ... diğer servisler ve middleware'ler ...
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<ITourRepository, TourRepository>();
+builder.Services.AddScoped<ILanguageRepository, LanguageRepository>();
+builder.Services.AddScoped<ISaasRepository, SaasRepository>();
 
 
 

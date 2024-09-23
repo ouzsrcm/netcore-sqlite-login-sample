@@ -5,6 +5,7 @@ namespace users.RestApi.Models;
 public class Tour
 {
     public int Id { get; set; }
+    public int SaasId { get; set; }
 
     public string ImageUrl { get; set; }
     public string Duration { get; set; }
@@ -19,6 +20,7 @@ public class Tour
 
     public string Transportation { get; set; }
 
+    public Saas Saas { get; set; }
 
     public ICollection<TourContent> TourContents { get; set; }
 }

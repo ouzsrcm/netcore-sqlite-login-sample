@@ -8,8 +8,8 @@ namespace users.RestApi.Repositories.Tour
     {
         Task<IEnumerable<Models.Tour>> GetAllAsync();
         Task<Models.Tour> GetByIdAsync(int id);
-        Task<Models.Tour> AddAsync(Models.Tour customer);
-        Task UpdateAsync(Models.Tour customer);
+        Task<Models.Tour> AddAsync(Models.Tour tour);
+        Task UpdateAsync(Models.Tour tour);
         Task DeleteAsync(int id);
     }
 }

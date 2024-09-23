@@ -11,6 +11,7 @@ namespace users.RestApi.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<Customer> Customers { get; set; }
+        public DbSet<Language> Languages { get; set; }
 
 
         public DbSet<Tour> Tours { get; set; }

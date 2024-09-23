@@ -4,10 +4,13 @@ public class TourContent
 {
     public int Id { get; set; }
     public int TourId { get; set; }
+    public Tour Tour { get; set; }
+
+    public int LanguageId { get; set; }
+    public Language Language { get; set; }
     public string Content { get; set; } // İçerik
     public string Name { get; set; }
     public string Description { get; set; }
-    public int LanguageId { get; set; }
     public string TermsAndConditions { get; set; }
     public string CancellationPolicy { get; set; }
     public string ContactInformation { get; set; }
@@ -21,5 +24,4 @@ public class TourContent
     public string Itinerary { get; set; }
     public string Notes { get; set; }
 
-    public Tour Tour { get; set; }
 }

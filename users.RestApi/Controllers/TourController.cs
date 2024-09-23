@@ -28,14 +28,14 @@ namespace users.RestApi.Controllers
 
 
        [HttpPost("create")]
-        public async Task<ActionResult<Customer>> PostCustomer(Customer tour)
+        public async Task<ActionResult<Tour>> PostTour(Tour tour)
         {
-            var createdCustomer = await _tourRepository.AddAsync(tour);
-            return CreatedAtAction(nameof(GetCustomer), new { id = createdCustomer.Id }, createdCustomer);
+            var createdTour = await _tourRepository.AddAsync(tour);
+            return CreatedAtAction(nameof(GetTour), new { id = createdTour.Id }, createdTour);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCustomer(int id, Customer tour)
+        public async Task<IActionResult> PutTour(int id, Tour tour)
         {
             if (id != tour.Id)
             {
@@ -47,14 +47,14 @@ namespace users.RestApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCustomer(int id)
+        public async Task<IActionResult> DeleteTour(int id)
         {
             await _tourRepository.DeleteAsync(id);
             return NoContent();
         }
 
-        [HttpGet("{id}", Name = "GetCustomer")]
-        public async Task<ActionResult<Customer>> GetCustomer(int id)
+        [HttpGet("{id}", Name = "GetTour")]
+        public async Task<ActionResult<Tour>> GetTour(int id)
         {
 
             var tour = await _tourRepository.GetByIdAsync(id);
