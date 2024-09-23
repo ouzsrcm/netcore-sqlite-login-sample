@@ -26,6 +26,11 @@ namespace users.RestApi.Data
            .HasOne(tc => tc.Tour)
            .WithMany(t => t.TourContents)
            .HasForeignKey(tc => tc.TourId);
+
+           modelBuilder.Entity<User>()
+           .HasOne(c => c.Tour)
+           .WithMany(s => s.Users)
+           .HasForeignKey(c => c.DeletedBy);
         }
     }
 }
