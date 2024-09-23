@@ -29,7 +29,7 @@ builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<ITourRepository, TourRepository>();
 builder.Services.AddScoped<ILanguageRepository, LanguageRepository>();
 builder.Services.AddScoped<ISaasRepository, SaasRepository>();
-
+builder.Services.AddScoped<UploadService>();
 
 
 
@@ -57,6 +57,16 @@ using (var scope = app.Services.CreateScope())
 }
 
 
+public void ConfigureServices(IServiceCollection services)
+{
+    // ... diğer servisler ...
 
+    var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
+    if (!Directory.Exists(uploadPath))
+    {
+        Directory.CreateDirectory(uploadPath);
+    }
+    services.AddSingleton(new UploadService(uploadPath));
+}
 
 app.Run();
