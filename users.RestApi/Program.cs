@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using users.RestApi.Data;
 using Microsoft.OpenApi.Models;
 using users.RestApi.Repositories.Customer;
+using users.RestApi.Repositories.Tour;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +26,7 @@ builder.Services.AddSwaggerGen(c =>
 
 // ... diğer servisler ve middleware'ler ...
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<ITourRepository, TourRepository>();
 
 
 
